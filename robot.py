@@ -11,6 +11,9 @@ class Robot(TimedRobot):
     def __init__(self):
         super().__init__()
         self.drivetrain = Drivetrain()
+        self.turn_controller = PIDController(0.001, 0, 0)
+        self.drive_controller = PIDController(0.001, 0, 0)
+        self.stage = 0
 
     def robotInit(self):
         pass
@@ -28,11 +31,17 @@ class Robot(TimedRobot):
         self.drivetrain.set(speed+turn, speed-turn)
 
     def autonomousInit(self):
-        self.drivetrain.setPosition(0)
+        self.turn_controller.setPosition(0)
+        self.drive_controller.setPosition(0)
+        self.turn_controller.setTolerance(1, 1)
+        self.drive_controller.setTolerance(1, 1)
+        self.drivetrain.setYaw(0)
 
     def autonomousPeriodic(self):
-        pass
+        self.drive_controller.setSetpoint(10)
+        if self.drive_controller.atSetpoint():
+            self.stage += 1
 
 
 if __name__ == "__main__":
-    wpilib.run(Robot)
+    run(Robot)
