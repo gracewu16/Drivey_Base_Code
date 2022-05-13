@@ -4,9 +4,9 @@ from wpimath.controller import PIDController
 from drivetrain import Drivetrain
 
 
-class Robot(wpilib.TimedRobot):
+class Robot(TimedRobot):
     
-    joy1=Joystick(0)
+    joy1 = Joystick(0)
     
     def __init__(self):
         super().__init__()
@@ -28,7 +28,7 @@ class Robot(wpilib.TimedRobot):
         self.drivetrain.set(speed+turn, speed-turn)
 
     def autonomousInit(self):
-        pass
+        self.drivetrain.setPosition(0)
 
     def autonomousPeriodic(self):
         pass
