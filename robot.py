@@ -38,7 +38,7 @@ class Robot(wpilib.TimedRobot):
     def autonomousPeriodic(self):
         self.drive_controller.setSetpoint(self.revolutions)
 
-        motion = self.drive_controller.calculate(measurement = self.drivetrain.m_left_encoder)
+        motion = self.drive_controller.calculate(measurement = self.drivetrain.m_left_encoder.getPosition())
         motion = min(0.4, max(-0.4, motion))
         self.drivetrain.set(motion, motion)
 
