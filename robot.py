@@ -1,3 +1,4 @@
+import wpilib
 from wpilib import run, TimedRobot, Joystick
 import math
 from wpimath.controller import PIDController
@@ -13,7 +14,7 @@ class Robot(wpilib.TimedRobot):
         self.drivetrain = Drivetrain()
 
     def robotInit(self):
-        pass
+        self.drive_controller = PIDController(.003,0,0)
 
     def robotPeriodic(self):
         pass
@@ -28,10 +29,19 @@ class Robot(wpilib.TimedRobot):
         self.drivetrain.set(speed+turn, speed-turn)
 
     def autonomousInit(self):
-        pass
+        self.drivetrain.m_left_encoder.setPosition(0)
+        distance = 7
+        wheel_radius = 2
+        self.revolutions = (distance * 12 * 360) / (wheel_radius * 2 * math.pi)
+
 
     def autonomousPeriodic(self):
-        pass
+        self.drive_controller.setSetpoint(self.revolutions)
+
+        motion = self.drive_controller.calculate(measurement = self.drivetrain.m_left_encoder)
+        motion = min(0.4, max(-0.4, motion))
+        self.drivetrain.set(motion, motion)
+
 
 
 if __name__ == "__main__":
